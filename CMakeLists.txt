@@ -11,7 +11,12 @@ set( LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib )
 
 # OpenCV
 find_package(OpenCV REQUIRED)
-add_library (freenect_cv SHARED ${src_dir}/libfreenect_cv.cpp)
+
+add_library (freenect_cv SHARED
+#  ${src_dir}/libfreenect_cv.cpp
+  ${src_dir}/my_libfreenect_cv.cpp
+)
+
 set_target_properties (freenect_cv PROPERTIES
   VERSION ${PROJECT_VER}
   SOVERSION ${PROJECT_APIVER})
@@ -21,5 +26,8 @@ include_directories( ${PROJECT_SOURCE_DIR}/include/c_sync )
 
 target_link_libraries (freenect_cv freenect_sync ${OpenCV_LIBS})
 
-add_executable(freenect-cvdemo ${src_dir}/cvdemo.cpp)
-target_link_libraries(freenect-cvdemo freenect freenect_sync freenect_cv ${OpenCV_LIBS})
+#add_executable(freenect-cvdemo ${src_dir}/cvdemo.cpp)
+#target_link_libraries(freenect-cvdemo freenect freenect_sync freenect_cv ${OpenCV_LIBS})
+
+add_executable(kinect_cv ${src_dir}/kinect_cv.cpp)
+target_link_libraries(kinect_cv freenect freenect_sync freenect_cv ${OpenCV_LIBS})
