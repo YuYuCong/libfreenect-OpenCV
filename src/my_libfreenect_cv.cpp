@@ -16,7 +16,7 @@
 #include "libfreenect.h"
 #include "libfreenect_sync.h"
 #include "my_libfreenect_cv.h"
-
+#include <iostream>
 /*-----------------------------[Note]---------------------------*/
 // /// Enumeration of depth frame states
 // /// See http://openkinect.org/wiki/Protocol_Documentation#RGB_Camera for more information.
@@ -30,7 +30,7 @@
 // 	FREENECT_DEPTH_DUMMY        = 2147483647, /**< Dummy value to force enum to be 32 bits wide */
 // } freenect_depth_format;
 /*--------------------------------------------------------------*/
-IplImage *freenect_sync_get_depth_cv(int index, freenect_depth_format fmt)
+IplImage *freenect_sync_get_depth_cv(int index, freenect_depth_format fmt, unsigned int& timestamp_depth)
 {
 	static IplImage *image = 0;
 	static char *data = 0;
@@ -38,6 +38,7 @@ IplImage *freenect_sync_get_depth_cv(int index, freenect_depth_format fmt)
 	unsigned int timestamp;
 	if (freenect_sync_get_depth((void**)&data, &timestamp, index, fmt))
 	    return NULL;
+	timestamp_depth = timestamp;
 	cvSetData(image, data, 640*2);
 	return image;
 }
@@ -57,7 +58,7 @@ IplImage *freenect_sync_get_depth_cv(int index, freenect_depth_format fmt)
 // 	FREENECT_VIDEO_DUMMY           = 2147483647, /**< Dummy value to force enum to be 32 bits wide */
 // } freenect_video_format;
 /*--------------------------------------------------------------*/
-IplImage *freenect_sync_get_rgb_cv(int index, freenect_video_format fmt)
+IplImage *freenect_sync_get_rgb_cv(int index, freenect_video_format fmt, unsigned int& timestamp_rgb)
 {
 	static IplImage *image = 0;
 	static char *data = 0;
@@ -65,6 +66,7 @@ IplImage *freenect_sync_get_rgb_cv(int index, freenect_video_format fmt)
 	unsigned int timestamp;
 	if (freenect_sync_get_video((void**)&data, &timestamp, index, fmt))
 	    return NULL;
+	timestamp_rgb = timestamp;
 	cvSetData(image, data, 640*3);
 	return image;
 }
